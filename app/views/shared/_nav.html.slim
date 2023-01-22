@@ -1,0 +1,12 @@
+nav class="navbar navbar-light bg-light"
+  = link_to 'Stack Overflow', root_path, class: 'navbar-brand'
+  span class="navbar-text"
+  - if user_signed_in?
+    = link_to 'Log out', destroy_user_session_path, method: :delete
+  - else
+    span>
+    = link_to 'Sign in', new_user_session_path
+    span>
+    = link_to 'Sign up', new_user_registration_path
+  span
+nav
