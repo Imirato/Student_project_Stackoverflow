@@ -7,7 +7,7 @@ feature 'User can view the list of questions' do
   given!(:question3) { create(:question) }
 
   scenario 'User tries to view the list of questions' do
-    visit root_path
+    visit questions_path
 
     expect(page).to have_content question.title
     expect(page).to have_content question2.title
