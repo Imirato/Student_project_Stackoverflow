@@ -1,4 +1,5 @@
 class AnswersController < ApplicationController
+  before_action :authenticate_user!, except: [:index, :show]
   before_action :find_question, only: %i[new create]
   before_action :find_answer, only: %i[edit update destroy]
 
@@ -10,9 +11,9 @@ class AnswersController < ApplicationController
     @answer = @question.answers.new(answer_params)
 
     if @answer.save
-      redirect_to question_path(@question)
+      redirect_to question_path(@question), notice: 'Your answer successfully created.'
     else
-      render :new
+      render 'questions/show'
     end
   end
 
