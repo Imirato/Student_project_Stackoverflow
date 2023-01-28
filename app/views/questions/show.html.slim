@@ -1,5 +1,9 @@
 h1= @question.title
 p= @question.body
+- if @question.user.author_of?(@question)
+  = link_to 'Delete the question', question_path(@question),
+                          method: :delete,
+                          data: { confirm: 'Are you sure?' }
 
 = render 'shared/errors', resource: @answer
 

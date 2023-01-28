@@ -4,6 +4,7 @@ FactoryBot.define do
   end
 
   factory :question do
+    association :user
     title
     body { "MyText" }
 
