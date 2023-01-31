@@ -1,6 +1,6 @@
 h1= @question.title
 p= @question.body
-- if @question.user.author_of?(@question)
+- if current_user&.author_of?(@question)
   = link_to 'Delete the question', question_path(@question),
                           method: :delete,
                           data: { confirm: 'Are you sure?' }
@@ -8,6 +8,12 @@ p= @question.body
 = render 'shared/errors', resource: @answer
 
 
-- @question.answers.each do |answer|
+- @question.answers.select(&:persisted?).each do |answer|
   p= answer.body
+  - if current_user&.author_of?(answer)
+    = link_to 'Delete the answer', answer_path(answer),
+                                   method: :delete,
+                                   data: { confirm: 'Are you sure?' }
+
+p= 'Write an answer'
 = render 'answers/form'
