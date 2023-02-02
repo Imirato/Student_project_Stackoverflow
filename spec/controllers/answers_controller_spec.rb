@@ -3,8 +3,11 @@ require 'rails_helper'
 RSpec.describe AnswersController, type: :controller do
   let(:answer) { create(:answer) }
   let(:question) { create(:question) }
+  let(:user) { create(:user) }
 
   describe 'GET #new' do
+    before { login(user) }
+
     before { get :new, params: { question_id: question } }
 
     it 'associates answer with question' do
@@ -21,6 +24,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'GET #edit' do
+    before { login(user) }
+
     before { get :edit, params: { id: answer } }
 
     it 'assigns the requested answer to @answer' do
@@ -33,6 +38,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #create' do
+    before { login(user) }
+
     context 'with valid attributes' do
       it 'saves a new answer in the database' do
         expect { post :create, params: { question_id: question, answer: attributes_for(:answer) } }.to change(Answer, :count).by(1)
@@ -53,12 +60,14 @@ RSpec.describe AnswersController, type: :controller do
       it 'render new view again' do
         post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) }
 
-        expect(response).to render_template :new
+        expect(response).to render_template :show
       end
     end
   end
 
   describe 'PATCH #update' do
+    before { login(user) }
+
     context 'with valid attributes' do
       let(:new_answer_body) { 'new body' }
 
@@ -98,16 +107,34 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let!(:answer) { create(:answer) }
+    let(:user) { create(:user) }
+    let(:author) { create(:user) }
+    let!(:answer) { create(:answer, user: author) }
 
-    it 'deletes the answer' do
-      expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+    context 'user is author of answer' do
+      before { login(author) }
+
+      it 'deletes the answer' do
+        expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+      end
+
+      it 'redirects to question page' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to question_path(answer.question)
+      end
     end
 
-    it 'redirects to index' do
-      delete :destroy, params: { id: answer }
+    context 'user is not author of answer' do
+      before { login(user) }
 
-      expect(response).to redirect_to answer.question
+      it 'not deletes the question' do
+        expect { delete :destroy, params: { id: answer } }.not_to change(Question, :count)
+      end
+
+      it 'redirects to question page' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to question_path(answer.question)
+      end
     end
   end
 end
