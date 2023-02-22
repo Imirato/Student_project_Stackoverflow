@@ -11,24 +11,23 @@ feature 'User can write an answer to the question' do
       visit question_path(question)
     end
 
-    scenario 'tries to write an answer' do
+    scenario 'tries to write an answer', js: true do
       fill_in 'Body', with: 'text text text'
       click_on 'Post'
 
       expect(page).to have_content question.title
       expect(page).to have_content question.body
-      expect(page).to have_content 'Your answer successfully created.'
       expect(page).to have_content 'text text text'
     end
 
-    scenario 'tries to write an answer with errors' do
+    scenario 'tries to write an answer with errors', js: true do
       click_on 'Post'
 
       expect(page).to have_content "Body can't be blank"
     end
   end
 
-  scenario 'Unauthenticated user tries to write an answer' do
+  scenario 'Unauthenticated user tries to write an answer' , js: true do
     visit question_path(question)
     click_on 'Post'
 
