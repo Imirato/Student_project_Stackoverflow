@@ -9,12 +9,8 @@ p= @question.body
   = render 'shared/errors', resource: @answer
 
 .answers
-  - @question.answers.select(&:persisted?).each do |answer|
-    p= answer.body
-    - if current_user&.author_of?(answer)
-      = link_to 'Delete the answer', answer_path(answer),
-                                     method: :delete,
-                                     data: { confirm: 'Are you sure?' }
+  p = 'Answers:'
+  = render @question.answers
 
 p= 'Write an answer'
 = render 'answers/form'

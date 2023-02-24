@@ -71,28 +71,22 @@ RSpec.describe AnswersController, type: :controller do
     context 'with valid attributes' do
       let(:new_answer_body) { 'new body' }
 
-      it 'assigns the requested answer to @answer' do
-        post :update, params: { id: answer, answer: attributes_for(:answer) }
-
-        expect(assigns(:answer)).to eq answer
-      end
-
       it 'changes answer attributes' do
-        patch :update, params: { id: answer, answer: { body: new_answer_body } }
+        patch :update, params: { id: answer, answer: { body: new_answer_body } }, format: :js
         answer.reload
 
         expect(answer.body).to eq new_answer_body
       end
 
-      it 'redirects to updated answer' do
-        patch :update, params: { id: answer, answer: attributes_for(:answer) }
+      it 'render update view' do
+        patch :update, params: { id: answer, answer: attributes_for(:answer) }, format: :js
 
-        expect(response).to redirect_to answer.question
+        expect(response).to render_template :update
       end
     end
 
     context 'with invalid attributes' do
-      before { patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) } }
+      before { patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js }
 
       it 'does not change answer' do
         answer.reload
@@ -100,8 +94,8 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.body).to eq 'MyText'
       end
 
-      it 'render edit view again' do
-        expect(response).to render_template :edit
+      it 'render update view again' do
+        expect(response).to render_template :update
       end
     end
   end
