@@ -8,7 +8,7 @@ import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 import "./answers"
-// import "./questions"
+import "./questions"
 
 //= require jquery
 //= require jquery_ujs

@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'User can write an answer to the question' do
   given(:question) { create(:question) }
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
     given(:user) { create(:user) }
 
     background do
@@ -11,7 +11,7 @@ feature 'User can write an answer to the question' do
       visit question_path(question)
     end
 
-    scenario 'tries to write an answer', js: true do
+    scenario 'tries to write an answer' do
       fill_in 'Body', with: 'text text text'
       click_on 'Post'
 
@@ -20,7 +20,7 @@ feature 'User can write an answer to the question' do
       expect(page).to have_content 'text text text'
     end
 
-    scenario 'tries to write an answer with errors', js: true do
+    scenario 'tries to write an answer with errors' do
       click_on 'Post'
 
       expect(page).to have_content "Body can't be blank"
