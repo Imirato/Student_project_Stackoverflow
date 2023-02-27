@@ -117,4 +117,20 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #mark_as_best' do
+    let(:user) { create(:user) }
+    let!(:answer) { create(:answer, question: question, user: user) }
+
+    it 'change best answer' do
+      post :mark_as_best, params: { id: answer }, format: :js
+      question.reload
+      expect(question.best_answer).to eq answer
+    end
+
+    it 'render mark_as_best view' do
+      post :mark_as_best, params: { id: answer }, format: :js
+      expect(response).to render_template :mark_as_best
+    end
+  end
 end

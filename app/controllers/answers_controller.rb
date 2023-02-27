@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :find_question, only: %i[new create]
-  before_action :find_answer, only: %i[edit update destroy]
+  before_action :find_answer, only: %i[edit update destroy mark_as_best]
 
   def new
     @answer = @question.answers.new
@@ -25,6 +25,11 @@ class AnswersController < ApplicationController
     else
       redirect_to question_path(@answer.question)
     end
+  end
+
+  def mark_as_best
+    @last_best_answers = @answer.question.best_answer
+    @answer.question.update(best_answer_id: @answer.id)
   end
 
   private
