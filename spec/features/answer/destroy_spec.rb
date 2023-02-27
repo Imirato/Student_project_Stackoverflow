@@ -1,33 +1,33 @@
 require 'rails_helper'
 
-feature 'User can delete his answer' do
+feature 'User can delete his answer to the question' do
 
   given(:user) { create(:user) }
-  given(:question) { create(:question, user: user) }
-  given!(:answer) { create(:answer, question: question, user: user) }
+  given(:question) { create(:question) }
+  given!(:answer) { create(:answer, user: user, question: question) }
 
-  describe 'Authenticated' do
-    scenario 'user tries to delete his answer' do
+  describe 'Authenticated user' do
+
+    scenario 'tries to delete his answer', js: true do
       sign_in(user)
       visit question_path(question)
       click_on 'Delete the answer'
 
-      expect(page).to have_content 'Your answer was successfully deleted.'
+      expect(page).not_to have_content answer.body
     end
 
-    scenario 'user tries to delete the answer of other user' do
+    scenario "tries to delete other user's answer" do
       another_user = create(:user)
-
       sign_in(another_user)
       visit question_path(question)
 
-      expect(page).to have_no_link('Delete the answer', href: answer_path(answer))
+      expect(page).not_to have_content 'Delete the answer'
     end
   end
 
   scenario 'Unauthenticated user tries to delete the answer' do
     visit question_path(question)
 
-    expect(page).to have_no_link('Delete the answer', href: answer_path(answer))
+    expect(page).not_to have_content 'Delete the answer'
   end
 end
