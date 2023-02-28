@@ -12,9 +12,9 @@
     - if @question.best_answer
       p = 'Best answer:'
       = render @best_answer
-    .other_answer
-      p = 'Answers:'
-      = render @other_answers
+  .other_answer
+    p = 'Answers:'
+    = render @other_answers
 
 p= 'Write an answer'
 = render 'answers/form'

@@ -119,8 +119,9 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PATCH #mark_as_best' do
-    let(:user) { create(:user) }
     let!(:answer) { create(:answer, question: question, user: user) }
+
+    before { login(user) }
 
     it 'change best answer' do
       post :mark_as_best, params: { id: answer }, format: :js

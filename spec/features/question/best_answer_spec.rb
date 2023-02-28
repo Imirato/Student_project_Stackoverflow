@@ -5,7 +5,7 @@ feature 'Author of question can choose the best answer' do
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
   given!(:answer) { create(:answer, question: question, user: create(:user)) }
-  given!(:another_answer) { create(:answer, question: question, user: create(:user)) }
+  given!(:another_answer) { create(:answer, question: question, user: create(:user), body: 'anotherTitle') }
 
   describe 'Author of question' do
     background do
@@ -22,8 +22,9 @@ feature 'Author of question can choose the best answer' do
     end
 
     scenario 'tries to choose the another best answer', js: true do
-      find("#answer-#{answer.id} .best_answer_link").click
 
+      find("#answer-#{answer.id} .best_answer_link").click
+      save_and_open_page
       find("#answer-#{another_answer.id} .best_answer_link").click
 
       within '.best_answer' do
