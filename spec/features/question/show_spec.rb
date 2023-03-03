@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'User can view a question and answers' do
   given(:question) { create(:question) }
-  given(:answers) { create_list(:answer, 3, question: question) }
+  given!(:answers) { create_list(:answer, 3, question: question) }
 
   scenario 'User tries to view a question and answers' do
     visit question_path(question)

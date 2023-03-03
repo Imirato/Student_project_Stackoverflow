@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'User can write an answer to the question' do
   given(:question) { create(:question) }
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
     given(:user) { create(:user) }
 
     background do
@@ -17,7 +17,6 @@ feature 'User can write an answer to the question' do
 
       expect(page).to have_content question.title
       expect(page).to have_content question.body
-      expect(page).to have_content 'Your answer successfully created.'
       expect(page).to have_content 'text text text'
     end
 
@@ -28,7 +27,7 @@ feature 'User can write an answer to the question' do
     end
   end
 
-  scenario 'Unauthenticated user tries to write an answer' do
+  scenario 'Unauthenticated user tries to write an answer' , js: true do
     visit question_path(question)
     click_on 'Post'
 
