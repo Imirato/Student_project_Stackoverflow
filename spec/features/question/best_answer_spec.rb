@@ -24,7 +24,6 @@ feature 'Author of question can choose the best answer' do
     scenario 'tries to choose the another best answer', js: true do
 
       find("#answer-#{answer.id} .best_answer_link").click
-      save_and_open_page
       find("#answer-#{another_answer.id} .best_answer_link").click
 
       within '.best_answer' do
