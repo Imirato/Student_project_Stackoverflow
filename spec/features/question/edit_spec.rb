@@ -23,7 +23,7 @@ feature 'User can edit his question' do
       end
     end
 
-    scenario 'tries to edit his question and attached files' do
+    scenario 'tries to edit his question and attach files' do
       click_on 'Edit question'
 
       within '.question' do
