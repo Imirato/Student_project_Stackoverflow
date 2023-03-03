@@ -36,6 +36,23 @@ feature 'User can edit his question' do
       end
     end
 
+    scenario 'tries to edit his question and delete attached file' do
+      question.files.attach(
+        io: File.open(Rails.root.join('spec', 'rails_helper.rb')),
+        filename: 'rails_helper.rb'
+      )
+
+      visit question_path(question)
+
+      click_on 'Edit question'
+
+      within '.question' do
+        click_on 'Delete file'
+
+        expect(page).to_not have_content 'rails_helper.rb'
+      end
+    end
+
     scenario 'tries to edit his question with mistakes' do
       click_on 'Edit question'
 
