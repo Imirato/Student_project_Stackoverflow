@@ -24,6 +24,36 @@ feature 'User can edit his answer' do
       end
     end
 
+    scenario 'tries to edit his answer and attach files' do
+      click_on 'Edit'
+
+      within '.answers' do
+        attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+
+        click_on 'Save'
+
+        expect(page).to have_content 'rails_helper.rb'
+        expect(page).to have_content 'spec_helper.rb'
+      end
+    end
+
+    scenario 'tries to edit his answer and delete attached file' do
+      answer.files.attach(
+        io: File.open(Rails.root.join('spec', 'rails_helper.rb')),
+        filename: 'rails_helper.rb'
+      )
+
+      visit question_path(question)
+
+      click_on 'Edit'
+
+      within '.answers' do
+        click_on 'Delete file'
+
+        expect(page).to_not have_content 'rails_helper.rb'
+      end
+    end
+
     scenario 'tries to edit his answer with mistakes' do
       click_on 'Edit'
 

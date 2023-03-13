@@ -32,6 +32,7 @@ gem 'pry', '~> 0.13.1'
 gem 'devise'
 gem 'twitter-bootstrap-rails'
 gem 'jquery-rails'
+gem 'aws-sdk-s3', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
